@@ -1,8 +1,8 @@
 // =================================================================
 // PARTE 1: CONFIGURAÇÕES E VARIÁVEIS GLOBAIS
 // =================================================================
-const LOCAL_PERMITIDO = { latitude: -22.429317, longitude: -45.498895 };
-const TOLERANCIA_METROS = 30;
+const LOCAL_PERMITIDO = { latitude: -22.8154882, longitude: -46.6928078 };
+const TOLERANCIA_METROS = 300;
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3mJcbJH83lW_EPjtkxiAURCwXYD3JzFMu-bGyYcLOFGvjCX--IyDANifB6NO24C2F/exec';
 
 const seletorFuncionaria = document.getElementById('employee');
@@ -13,23 +13,20 @@ const mensagemStatus = document.getElementById('status-message');
 const reportArea = document.getElementById('report-area');
 const summaryReportDiv = document.getElementById('summary-report');
 const historyReportDiv = document.getElementById('history-report');
-const statusIndicator = document.getElementById('status-indicator'); // Pega o novo elemento
+const statusIndicator = document.getElementById('status-indicator');
 
 // =================================================================
 // PARTE 2: LÓGICA PRINCIPAL
 // =================================================================
 
-// Evento que dispara quando a página termina de carregar
 window.addEventListener('load', () => {
     verificarStatusOnline();
 });
 
-// Evento que dispara quando a funcionária é trocada no seletor
 seletorFuncionaria.addEventListener('change', () => {
     verificarStatusOnline();
-    reportArea.style.display = 'none'; // Esconde o relatório ao trocar de funcionária
+    reportArea.style.display = 'none';
 });
-
 
 function registrarPonto(acao) {
     const nomeFuncionario = seletorFuncionaria.value;
@@ -72,7 +69,7 @@ function enviarDadosParaPlanilha(nome, acao) {
         .then(data => {
             if (data.result === 'success') {
                 atualizarStatus(`Ponto de ${acao} para ${nome} registrado com sucesso às ${horarioFormatado}!`, 'success');
-                verificarStatusOnline(); // Atualiza o status online após registrar
+                verificarStatusOnline();
                 setTimeout(() => {
                     desativarBotoes(false);
                     atualizarStatus('Aguardando ação...', 'neutral');
@@ -88,7 +85,7 @@ function enviarDadosParaPlanilha(nome, acao) {
         })
         .catch(error => {
             console.error('Erro de comunicação:', error);
-            atualizarStatus(`Erro de comunicação. Verifique sua conexão.`, 'error');
+            atualizarStatus(`Erro de comunicação. Verifique sua conexão e tente novamente.`, 'error');
             desativarBotoes(false);
         });
 }
@@ -97,17 +94,14 @@ function buscarRelatorio() {
     const nomeFuncionario = seletorFuncionaria.value;
     reportArea.style.display = 'block';
     summaryReportDiv.innerHTML = `<p class="text-info">Buscando relatório para ${nomeFuncionario}...</p>`;
-    historyReportDiv.innerHTML = ''; 
-
-    verificarStatusOnline(true); // Chama a função que já busca tudo
+    historyReportDiv.innerHTML = '';
+    verificarStatusOnline(true);
 }
 
-// NOVA FUNÇÃO PARA VERIFICAR O STATUS ONLINE
 function verificarStatusOnline(showFullReport = false) {
     const nomeFuncionario = seletorFuncionaria.value;
     const urlBusca = `${SCRIPT_URL}?employee=${nomeFuncionario}`;
     
-    // Atualiza o indicador para "verificando"
     statusIndicator.classList.remove('bg-green-500', 'bg-gray-400');
     statusIndicator.classList.add('bg-yellow-400');
     statusIndicator.setAttribute('title', 'Verificando status...');
@@ -118,7 +112,6 @@ function verificarStatusOnline(showFullReport = false) {
             if (res.result === 'success') {
                 const lastAction = res.data.lastAction;
                 
-                // Atualiza o indicador de status
                 statusIndicator.classList.remove('bg-yellow-400');
                 if (lastAction === 'Entrada') {
                     statusIndicator.classList.add('bg-green-500');
@@ -128,7 +121,6 @@ function verificarStatusOnline(showFullReport = false) {
                     statusIndicator.setAttribute('title', 'Fora de serviço');
                 }
 
-                // Se a função foi chamada pelo botão "Ver Meu Relatório", exibe tudo
                 if (showFullReport) {
                     const summaryData = res.data.summary;
                     const historyData = res.data.history;
@@ -156,7 +148,7 @@ function verificarStatusOnline(showFullReport = false) {
         .catch(error => {
             console.error('Erro na busca de status:', error);
             statusIndicator.classList.remove('bg-yellow-400');
-            statusIndicator.classList.add('bg-red-500'); // Erro
+            statusIndicator.classList.add('bg-red-500');
             statusIndicator.setAttribute('title', 'Erro ao verificar status');
             if (showFullReport) {
                 summaryReportDiv.innerHTML = `<p class="text-error">Não foi possível carregar o relatório.</p>`;
@@ -165,7 +157,7 @@ function verificarStatusOnline(showFullReport = false) {
 }
 
 // =================================================================
-// PARTE 4: FUNÇÕES AUXILIARES (sem alterações)
+// PARTE 4: FUNÇÕES AUXILIARES
 // =================================================================
 function atualizarStatus(mensagem, tipo) {
     mensagemStatus.textContent = mensagem;
