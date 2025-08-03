@@ -1,7 +1,5 @@
 # Ponto Web - Caramelo de Maria
 
-![Logo do Projeto](https://placehold.co/150x150/FFF8E1/4E342E?text=Caramelo%0Ade+Maria)
-
 ## 📖 Sobre o Projeto
 
 **Ponto Web - Caramelo de Maria** é um sistema de controle de ponto simples, moderno e eficaz, desenvolvido para atender às necessidades de duas funcionárias. O sistema utiliza a geolocalização do navegador para garantir que o ponto só possa ser registrado no local de trabalho.
