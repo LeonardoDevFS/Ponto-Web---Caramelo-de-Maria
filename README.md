@@ -115,5 +115,5 @@ Após a hospedagem, acesse o link gerado pelo serviço no navegador do celular p
 
 **Leonardo Jonathan do Carmo**
 
-* GitHub: `[Seu Usuário do GitHub]`
-* LinkedIn: `[Seu Perfil do LinkedIn]`
+* GitHub: `[linkedin.com/in/leonardo2002/]`
+* LinkedIn: `[https://www.linkedin.com/in/leonardo2002/]`
